@@ -34,22 +34,22 @@ app.post('/api/shorturl/new', (req, res) => {
 
 	var validate = regex.test(url);
 	if (validate) {
-		ShortUrl.findOne({ url }, (err, doc) => {
+		ShortUrl.findOne({ original_url: url }, (err, doc) => {
 			if (doc) {
 				res.json({
-					url: doc.url,
-					hash: doc.hash,
+					original_url: doc.original_url,
+					short_url: doc.short_url,
 				});
 				return;
 			} else {
 				let shortUrlDoc = new ShortUrl({
-					url,
-					hash: shortid.generate(),
+					original_url: url,
+					short_url: shortid.generate(),
 				});
 				shortUrlDoc.save((err, shortDoc) => {
 					res.json({
-						url: shortDoc.url,
-						hash: shortDoc.hash,
+						original_url: shortDoc.original_url,
+						short_url: shortDoc.short_url,
 					});
 				});
 				return;
@@ -67,9 +67,9 @@ app.post('/api/shorturl/new', (req, res) => {
 
 app.get('/api/shorturl/:hash', (req, res) => {
 	const hash = req.params.hash;
-	ShortUrl.findOne({ hash }, (err, doc) => {
+	ShortUrl.findOne({ short_url: hash }, (err, doc) => {
 		if (doc) {
-			res.redirect(doc.url);
+			res.redirect(doc.original_url);
 		} else {
 			res.json({
 				error: "That's not a valid shorturl",
