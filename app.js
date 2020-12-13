@@ -6,7 +6,6 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const shortid = require('shortid');
-require('dotenv').config();
 const port = 3000;
 
 // Mongoose Connect
